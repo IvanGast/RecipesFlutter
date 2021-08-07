@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "253873729240",
+    "firebase_url": "https://recipes-app-ivan-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "recipes-app-ivan",
+    "storage_bucket": "recipes-app-ivan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253873729240:android:a343b95349011459c3b1ad",
+        "android_client_info": {
+          "package_name": "com.example.recipes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253873729240-jbepp6bm1a8reioi5nm78ioigljmau3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwie4eKmmvsHLVz9acirN1FpoOmWPE66s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "253873729240-jbepp6bm1a8reioi5nm78ioigljmau3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
