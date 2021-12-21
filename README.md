@@ -1,4 +1,4 @@
-# Recipes Application, where user can add recipes or view other user's/his recipes.
+# Recipes Application, where user can add recipes or view other users/his recipes.
 
 ## Following popular libraries are used in this project:
 
