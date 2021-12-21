@@ -3,7 +3,7 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipes_app/constants/strings.dart';
 
-import '../model/recipe_model.dart';
+import '../model/recipe.dart';
 
 class RecipeListItem extends StatelessWidget {
   final RecipeModel _recipe;
@@ -80,7 +80,7 @@ class RecipeListItem extends StatelessWidget {
           ));
 
   String _getPictureUrl() {
-    return Strings.IMAGES_PATH + _recipe.pictureUrls[0];
+    return Strings.IMAGES_PATH + "/" + _recipe.id + _recipe.pictureUrls[0];
   }
 
   void selectRecipe(BuildContext ctx) {

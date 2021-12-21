@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipes_app/bloc/recipes/recipes_bloc.dart';
 import 'package:recipes_app/bloc/recipes/recipes_events.dart';
 import 'package:recipes_app/bloc/recipes/recipes_states.dart';
-import 'package:recipes_app/utils/my_painter.dart';
+import 'package:recipes_app/utils/wave_painter.dart';
 
 import '../widget/recipe_list_item.dart';
 
@@ -20,13 +20,11 @@ class _RecipesListState extends State<RecipesList> {
   RecipesBloc _recipesBloc;
   String _userUid;
 
-  _RecipesListState();
-
   @override
   void initState() {
     super.initState();
     _userUid = FirebaseAuth.instance.currentUser.uid;
-    _recipesBloc = BlocProvider.of(context);
+    _recipesBloc = BlocProvider.of<RecipesBloc>(context);
   }
 
   @override
@@ -50,7 +48,7 @@ class _RecipesListState extends State<RecipesList> {
         width: double.infinity,
         height: 300.0,
         child: CustomPaint(
-          painter: MyPainter(),
+          painter: WavePainter(),
         ));
   }
 
@@ -62,21 +60,22 @@ class _RecipesListState extends State<RecipesList> {
     return SliverAppBar(
         floating: true,
         expandedHeight: 0,
+        backgroundColor: Colors.amber,
         flexibleSpace: Container(
           margin: EdgeInsets.only(top: 20),
           padding: EdgeInsets.all(5),
           child: Row(children: [
             IconButton(
               icon: !_isMyRecipes
-                  ? Icon(Icons.restaurant_menu, color: Colors.black)
-                  : Icon(Icons.home, color: Colors.black),
+                  ? Icon(Icons.restaurant_menu, color: Colors.white)
+                  : Icon(Icons.home, color: Colors.white),
               onPressed: _toggleRecipes,
             ),
             Expanded(
                 child: Text(
               _isMyRecipes ? "My Recipes" : "Cook Book",
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold),
             )),
@@ -89,19 +88,13 @@ class _RecipesListState extends State<RecipesList> {
     return PopupMenuButton(
       icon: Icon(
         Icons.adaptive.more,
-        color: Colors.black,
+        color: Colors.white,
       ),
       itemBuilder: (BuildContext context) {
         return [
           PopupMenuItem(
               child: InkWell(
-                  onTap: () => _openProfile(context),
-                  splashColor: Colors.black87,
-                  // splash color
-                  child: Text('Profile'))),
-          PopupMenuItem(
-              child: InkWell(
-                  onTap: () => _logout(context),
+                  onTap:_logout,
                   splashColor: Colors.black87,
                   // splash color
                   child: Text('Logout'))),
@@ -112,22 +105,29 @@ class _RecipesListState extends State<RecipesList> {
 
   Widget _buildBloc() {
     return BlocBuilder<RecipesBloc, RecipesState>(
-      bloc: _recipesBloc,
       builder: (context, data) {
         if (data is RecipesStateRecipesLoaded) {
-          if (data.recipes != null) {
+          if (data.recipes != null && data.recipes.isNotEmpty) {
             return SliverList(
               delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) =>
-                      RecipeListItem(data.recipes[index]),
-                  childCount: data.recipes.length),
+                (BuildContext context, int index) =>
+                    RecipeListItem(data.recipes[index]),
+                childCount: data.recipes.length,
+              ),
             );
           } else {
             return SliverToBoxAdapter(
-                child: Center(child: Text("Nothing yet here")));
+                child: Center(child: Text("No recepies were found")));
           }
         } else {
-          return SliverToBoxAdapter(child: CircularProgressIndicator());
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(color: Colors.blue),
+              ),
+            ),
+          );
         }
       },
     );
@@ -135,14 +135,15 @@ class _RecipesListState extends State<RecipesList> {
 
   Widget _buildFAB() {
     return FloatingActionButton(
-      onPressed: () => _addRecipe(context),
+      backgroundColor: Colors.amber,
+      onPressed: _addRecipe,
       tooltip: 'Add Recipe',
       child: Icon(Icons.add),
     );
   }
 
-  void _addRecipe(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed("/add-recipe");
+  void _addRecipe() {
+    Navigator.of(context).pushNamed("/add-recipe");
   }
 
   void _toggleRecipes() {
@@ -154,12 +155,8 @@ class _RecipesListState extends State<RecipesList> {
         : _recipesBloc.add(RecipesEventRefresh(_userUid));
   }
 
-  void _openProfile(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed("/profile");
-  }
-
-  void _logout(BuildContext ctx) {
+  void _logout() {
     FirebaseAuth.instance.signOut();
-    Navigator.of(ctx).popAndPushNamed("/login");
+    Navigator.of(context).popAndPushNamed("/login");
   }
 }

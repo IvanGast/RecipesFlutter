@@ -2,7 +2,7 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipes_app/constants/strings.dart';
 import '../widget/ingredient.dart';
-import '../model/recipe_model.dart';
+import '../model/recipe.dart';
 
 class RecipeDetail extends StatelessWidget {
   @override
@@ -11,7 +11,8 @@ class RecipeDetail extends StatelessWidget {
     return Scaffold(
         body: Stack(
       children: [
-        _buildBackgroundImageContainer(context, _recipe.pictureUrls[0]),
+        _buildBackgroundImageContainer(
+            context, _recipe.id, _recipe.pictureUrls[0]),
         _buildBackgroundImageGradient(context),
         _buildContent(context, _recipe),
       ],
@@ -19,11 +20,11 @@ class RecipeDetail extends StatelessWidget {
   }
 
   Widget _buildBackgroundImageContainer(
-      BuildContext context, String pictureUrl) {
+      BuildContext context, String id, String pictureUrl) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: FirebaseImage(getPictureUrl(pictureUrl)),
+          image: FirebaseImage(getPictureUrl(id, pictureUrl)),
           fit: BoxFit.cover,
           alignment: Alignment.topCenter,
         ),
@@ -36,14 +37,15 @@ class RecipeDetail extends StatelessWidget {
 
   Widget _buildBackgroundImageGradient(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height / 2,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.8, 1],
-              colors: [Colors.transparent, Colors.white]),
-        ),);
+      height: MediaQuery.of(context).size.height / 2,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.8, 1],
+            colors: [Colors.transparent, Colors.white]),
+      ),
+    );
   }
 
   Widget _buildContent(BuildContext context, RecipeModel _recipe) {
@@ -66,20 +68,22 @@ class RecipeDetail extends StatelessWidget {
   Widget _buildCloseButton(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top: 10, right: 20),
-        height: 25,
-        width: 25,
+        height: 27,
+        width: 27,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               primary: Colors.grey,
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(6),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20))),
           child: Icon(
             Icons.close,
-            color: Colors.black38,
+            color: Colors.black,
             size: 15,
           ),
-          onPressed: () => {Navigator.of(context).pop()},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ));
   }
 
@@ -158,11 +162,11 @@ class RecipeDetail extends StatelessWidget {
         SizedBox(
           height: 22,
         ),
-        Text("Materials",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontSize: 20),),
+        Text(
+          "Materials",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+        ),
         _buildIngredientsColumn(_recipe)
       ]),
     );
@@ -190,7 +194,7 @@ class RecipeDetail extends StatelessWidget {
     );
   }
 
-  String getPictureUrl(String pictureUrl) {
-    return Strings.IMAGES_PATH + pictureUrl;
+  String getPictureUrl(String id, String pictureUrl) {
+    return Strings.IMAGES_PATH + "/" + id + pictureUrl;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:recipes_app/model/ingredient_model.dart';
+import 'package:recipes_app/model/ingredient.dart';
 
 class Ingredient extends StatelessWidget{
   final IngredientModel _ingredient;
@@ -17,7 +17,7 @@ class Ingredient extends StatelessWidget{
           dashLength: 1.0,
         )),
         SizedBox(width: 7,),
-        Text(_ingredient.name)
+        Text(_ingredient.amount)
     ],);
 
   }

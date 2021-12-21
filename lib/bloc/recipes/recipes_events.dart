@@ -1,11 +1,13 @@
-import 'package:equatable/equatable.dart';
-import 'package:recipes_app/model/recipe_model.dart';
+import 'dart:io';
 
-abstract class RecipesEvent extends Equatable {}
-class RecipesEventInit extends RecipesEvent {
+import 'package:equatable/equatable.dart';
+import 'package:recipes_app/model/recipe.dart';
+
+abstract class RecipesEvent extends Equatable {
   @override
   List<Object> get props => [runtimeType];
 }
+class RecipesEventInit extends RecipesEvent {}
 class RecipesEventRefresh extends RecipesEvent {
   final String userUid;
 
@@ -21,4 +23,13 @@ class RecipesEventRecipesLoaded extends RecipesEvent {
 
   @override
   List<Object> get props => [recipes];
+}
+class RecipesEventAdd extends RecipesEvent {
+  final RecipeModel model;
+  final List<File> files;
+
+  RecipesEventAdd({this.model, this.files});
+
+  @override
+  List<Object> get props => [model, files];
 }
