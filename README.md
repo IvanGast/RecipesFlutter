@@ -1,6 +1,6 @@
-# recipes_app
+# Recipes Application, where user can add recipes or view other user's/his recipes.
 
-Following popular libraries are used in this project:
+### Following popular libraries are used in this project:
 
 # hydrated_bloc
 # flutter_bloc
